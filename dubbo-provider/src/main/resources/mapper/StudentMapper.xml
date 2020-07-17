@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql，还有一个很重要的作用，后面会讲 -->
+<mapper namespace="com.boot.dubbo.provider.mapper.StudentMapper">
+    <!-- id:statement的id 或者叫做sql的id-->
+    <!-- parameterType:声明输入参数的类型 -->
+    <!-- resultType:声明输出结果的类型，应该填写pojo的全路径 -->
+    <!-- #{}：输入参数的占位符，相当于jdbc的？ -->
+	<resultMap id="StudentMap" type="com.boot.dubbo.interfaces.model.Student">
+		<id column="id" javaType="INTEGER" property="id" />
+		<result column="name" javaType="String" property="name"  />
+		<result column="chinese" javaType="INTEGER" property="chinese"  />
+		<result column="math" javaType="INTEGER" property="math"  />
+		<result column="english" javaType="INTEGER" property="english"  />
+	</resultMap>
+
+	<sql id="Student_Column_List">
+		id, name, chinese, math, english
+	</sql>
+	<!--查询所有的学生-->
+	<select id="selectAllStudent" resultMap="StudentMap">
+		select
+			<include refid="Student_Column_List" />
+		from Students
+	</select>
+    <!-- 通过id查询一个用户 -->
+    <select id="findUserById" parameterType="integer" resultType="com.boot.dubbo.interfaces.model.Student">
+		select * from Students where id=#{id};
+	</select>
+
+    <!-- 通过username 模糊查询用户列表
+        #{}: 占位符
+        ${}：字符串拼接
+     -->
+<!--    <select id="findUserByUsername" parameterType="String" resultType="com.itheima.domain.User">-->
+<!--		select * from user where username like '%${value}%';-->
+<!--	</select>-->
+
+
+    <!-- 添加用户 -->
+<!--    <insert id="insertUser"  parameterType="com.itheima.domain.User">-->
+<!--	   INSERT INTO user (username,birthday,sex,address) VALUES (#{username},#{birthday},#{sex},#{address});-->
+
+<!--	</insert>-->
+
+    <!-- 更新用户 -->
+    <update id="updateStudent" parameterType="com.boot.dubbo.interfaces.model.Student" >
+		update Students set name=#{name}, chinese=#{chinese}, math=#{math}, english=#{english} where id=#{id};
+	</update>
+
+    <!-- 删除用户 -->
+<!--    <delete id="deleteUser" parameterType="integer">-->
+<!--		delete from user where id= #{id};-->
+<!--	</delete>-->
+
+</mapper>
